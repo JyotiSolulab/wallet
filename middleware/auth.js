@@ -72,6 +72,7 @@ const verifyJWT = async (req, res, next) => {
 
 const login = async (req, res, next) => {
 	const { email, password } = req.body;
+
 	if (!email || !password)
 		return handleError({
 			res,
@@ -81,8 +82,12 @@ const login = async (req, res, next) => {
 
 	// 2. user exist and valid password
 	const user = await User.findOne({ email }).select('+password');
+	const isPasswordCorrect = await user.correctPassword(
+		password,
+		user.password
+	);
 
-	if (!user || !(await user.correctPassword(password, user.password))) {
+	if (!isPasswordCorrect) {
 		return handleError({
 			res,
 			statusCode: 401,
@@ -104,4 +109,26 @@ const login = async (req, res, next) => {
 	next();
 };
 
-export { login, verifyJWT, sendResponseWithJWt, getJWT };
+const isUserVerified = async (req, res, next) => {
+	const user = await getJWT(req, res);
+
+	if (!user.isVerified)
+		return handleError({
+			res,
+			statusCode: 401,
+			err_msg: 'User not verified',
+		});
+
+	if (user.privateKey !== null)
+		return handleError({
+			res,
+			statusCode: 409,
+			err_msg: 'Wallet already exist',
+		});
+
+	// Move to wallet creation
+	req.user = user;
+	next();
+};
+
+export { login, verifyJWT, sendResponseWithJWt, getJWT, isUserVerified };

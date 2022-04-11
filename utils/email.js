@@ -19,7 +19,6 @@ const verifyEmail = async (req, res) => {
 		);
 		return handleResponse({ res, msg: 'OTP verified' });
 	} catch (err) {
-		console.log(err);
 		return handleError({
 			res,
 			data: err,

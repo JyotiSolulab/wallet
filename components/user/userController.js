@@ -1,15 +1,14 @@
 import { sendResponseWithJWt } from '../../middleware/auth.js';
 import { handleError } from '../../config/handler.js';
+import createUser from './userService.js';
 
 const signup = async (req, res) => {
 	try {
-		console.log('entering signup');
 		const { name, email, password, passwordConfirm } = req.body;
-		const result = createUser(name, email, password, passwordConfirm);
+		const result = await createUser(name, email, password, passwordConfirm);
 
 		sendResponseWithJWt(result, 201, res);
 	} catch (err) {
-		console.log(err);
 		return handleError({
 			res,
 			statusCode: 401,

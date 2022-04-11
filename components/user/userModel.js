@@ -43,7 +43,7 @@ const user = new mongoose.Schema({
 	},
 	privateKey: {
 		type: String,
-		default: '',
+		default: null,
 	},
 });
 user.pre('save', async function (next) {
@@ -52,12 +52,10 @@ user.pre('save', async function (next) {
 
 	// HAshes the password
 	this.password = await bcrypt.hash(this.password, Number(config.SALT));
-	// console.log('encryption in process');
 
 	// Deletes the CP
 	this.passwordConfirm = undefined;
 
-	this.privateKey = await bcrypt.hash(this.password, Number(config.SALT));
 	next();
 });
 
@@ -68,7 +66,7 @@ user.methods.correctPassword = async function (
 	const result = await bcrypt.compare(candidatePassword, userPassword);
 	return result;
 };
-user.methods.compareOTP = async function (OTP) {
+user.methods.compareOTP = function (OTP) {
 	if (OTP === this.otp) {
 		return true;
 	}
