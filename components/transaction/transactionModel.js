@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
 const transaction = mongoose.Schema({
+	transactionHash: {
+		type: String,
+	},
 	from: {
 		type: String,
 	},

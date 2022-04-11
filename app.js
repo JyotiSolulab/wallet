@@ -4,6 +4,7 @@ import './config/config.js';
 import mongoInit from './config/db.js';
 import indexRouter from './components/index.js';
 import { handleError } from './config/handler.js';
+import './components/transaction/transactionServices.js';
 
 const app = express();
 mongoInit();

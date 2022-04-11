@@ -10,6 +10,8 @@ const config = {
 	MAIL_ADDRESS: process.env.MAIL_ADDRESS,
 	MAIL_PASSWORD: process.env.MAIL_PASSWORD,
 	SALT: process.env.SALT,
+	CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+	INFURA_ID: process.env.INFURA_ID,
 };
 
 export default config;
